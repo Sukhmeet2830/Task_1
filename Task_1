@@ -1,0 +1,174 @@
+def registration(username=None,password=None,password1=None):
+    username=input("Create Username: ")
+    password=input("Create Password: ")
+    password1=input("Re_enter Your Password:")
+    db=open("database.txt","r")
+    v=[]
+    for x in db:
+        a,b= x.split(",")
+        b=b.strip()
+        c=a,b
+        v.append(a)
+    if password1!=password:
+        print("Password Not Match")
+        registration()
+    elif len(password)<5:
+        print("Password Too Short")
+    elif len(password)>16:
+        print("Password Too Long")
+
+    else:
+        valid = 0
+        user = []
+        if username[0].isalpha():
+            if "@." not in username:
+                if "@" in username:
+                    if "." in username:
+                        user.append(username)
+                else:
+                    pass
+            else:
+                print("Invalid")
+        else:
+            print("Invalid")
+
+        if len(user) > 0:
+            if username not in v:
+                valid = valid + 1
+                pass
+            else:
+                print("Username Already Exist")
+                registration()
+
+        u, l, d, s = 0, 0, 0, 0
+        for x in password:
+            if x.isdecimal():
+                d = 1
+            if x.upper() in password:
+                u = 1
+
+            if x.lower() in password:
+                l = 1
+
+            if x == "@" or x == "$" or x == "_":
+                s = 1
+        if u == 1 and l == 1 and d == 1 and s == 1:
+
+            valid = valid + 1
+        else:
+            print("Invalid Password")
+
+        if valid == 2:
+
+            with open("database.txt", "a") as db:
+                db.write(username + ", " + password1 + "\n")
+                print("REGISTRATION SUCCESSFUL")
+            Home_page()
+        else:
+            print("Please Try Again")
+            registration()
+
+           
+def welcome():
+    print("Welcome")
+
+def forgetpassword(username=None):
+    Username = str(input("Enter Your Username:"))
+
+    if not len(Username ) < 1:
+        if True:
+            db = open("database.txt", "r")
+            d = []
+            f = []
+            for i in db:
+                a, b = i.split(",")
+                b = b.strip()
+                c = a, b
+                d.append(a)
+                f.append(b)
+            data = dict(zip(d, f))
+
+            if Username in d:
+
+                print("Your Password Is: ",f[d.index(Username)])
+            else:
+                print("Username Does Not Exist, Please Register")
+                registration()
+
+
+        else:
+            pass
+
+def login(username=None,password=None):
+    Username = input("Enter Your Username:")
+    Password = input("Enter Your Password:")
+
+    if not len(Username or Password) < 1:
+
+        if True:
+            db = open("database.txt", "r")
+            d = []
+            f = []
+            for i in db:
+                a, b = i.split(",")
+                b = b.strip()
+                c = a, b
+                d.append(a)
+                f.append(b)
+            data = dict(zip(d, f))
+            try:
+                if data[Username]:
+                    try:
+                        if Password == data[Username]:
+                            print("Login success!")
+                            print("Hi", Username)
+                            welcome()
+                        else:
+                            print("Incorrect Password or Username")
+                            print("Please Register")
+                            print("or")
+                            print("Please Select Forgrt Password")
+
+                            Home_page()
+                    except:
+                        print("Incorrect Password or Username")
+                        print("Please Register")
+                        print("or")
+                        print("Please Select Forgrt Password")
+                        Home_page()
+
+
+                else:
+                    print("Password or Username Doesn't Exist")
+                    print("Please Register")
+                    print("or")
+                    print("Please Select Forgrt Password")
+                    Home_page()
+            except:
+                print("Password or Username Doesn't Exist")
+                Home_page()
+
+
+
+    else:
+        print("Please Attempt Login Again")
+        login()
+
+    pass
+
+def Home_page(option=None):
+    print("Please Select The Option")
+    option=input(" Select an Option \n 1. Login:(L) \n 2. Register:(R) \n 3. Forget_password:(FP) \n 4. Exit(E) \n")
+    if option=="L":
+        login()
+    elif option=="R":
+        registration()
+    elif option=="FP":
+        forgetpassword()
+    elif option=="E":
+        print("Thank You")
+        exit()
+    else:
+        print("Invalid Option")
+        Home_page()
+Home_page()
